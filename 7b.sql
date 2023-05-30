@@ -1,5 +1,40 @@
---1. Napisz procedurê wypisuj¹c¹ do konsoli ci¹g Fibonacciego. Procedura musi przyjmowaæ jako argument wejœciowy liczbê n. Generowanie ci¹gu Fibonacciego musi zostaæ zaimplementowane jako osobna funkcja, wywo³ywana przez procedurê.create function dbo.fibonacci(@n int)returns @wynik table(wynikowe int)asbegin	declare	@n1 int = 0,	@n2 int = 0,	@n3 int = 1,	@i int = 2		while(@i <=@n+1)		begin		set @n1=@n2+@n3		set @n3=@n2		set @n2=@n1		set @i=@i+1		insert into @wynik values(@n2)		end	returnend;create or alter procedure fibo(@x int)asbeginselect *from dbo.fibonacci(@x)end;exec fibo 30;--2. Napisz trigger DML, który po wprowadzeniu danych do tabeli Persons zmodyfikuje nazwisko 
---tak, aby by³o napisane du¿ymi literami. GOCREATE TRIGGER trigger1
+--1. Napisz procedurÃª wypisujÂ¹cÂ¹ do konsoli ciÂ¹g Fibonacciego. Procedura musi przyjmowaÃ¦ jako argument wejÅ“ciowy liczbÃª n. Generowanie ciÂ¹gu Fibonacciego musi zostaÃ¦ zaimplementowane jako osobna funkcja, wywoÂ³ywana przez procedurÃª.
+
+
+
+create function dbo.fibonacci(@n int)
+returns @wynik table(wynikowe int)
+as
+begin
+	declare
+	@n1 int = 0,
+	@n2 int = 0,
+	@n3 int = 1,
+	@i int = 2
+	
+	while(@i <=@n+1)
+		begin
+		set @n1=@n2+@n3
+		set @n3=@n2
+		set @n2=@n1
+		set @i=@i+1
+		insert into @wynik values(@n2)
+		end
+	return
+end;
+
+create or alter procedure fibo(@x int)
+as
+begin
+select *from dbo.fibonacci(@x)
+end;
+
+exec fibo 30;
+
+--2. Napisz trigger DML, ktÃ³ry po wprowadzeniu danych do tabeli Persons zmodyfikuje nazwisko 
+--tak, aby byÂ³o napisane duÂ¿ymi literami. 
+GO
+CREATE TRIGGER trigger1
 	ON Person.Person
 	AFTER INSERT
 	AS
@@ -14,8 +49,8 @@ INSERT INTO Person.BusinessEntity (rowguid) VALUES (NEWID());
 INSERT INTO Person.Person(BusinessEntityID, FirstName, MiddleName, LastName, PersonType) VALUES (20778, 'ewka', 'beatka', 'tirurara', 'IN')
 SELECT *FROM Person.Person
 
---3.  Przygotuj trigger ‘taxRateMonitoring’, który wyœwietli komunikat o b³êdzie, je¿eli nast¹pi 
---zmiana wartoœci w polu ‘TaxRate’ o wiêcej ni¿ 30%.
+--3.  Przygotuj trigger â€˜taxRateMonitoringâ€™, ktÃ³ry wyÅ“wietli komunikat o bÂ³Ãªdzie, jeÂ¿eli nastÂ¹pi 
+--zmiana wartoÅ“ci w polu â€˜TaxRateâ€™ o wiÃªcej niÂ¿ 30%.
 GO
 CREATE TRIGGER taxratemonitoringg
 ON Sales.SalesTaxRate 
